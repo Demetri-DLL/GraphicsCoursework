@@ -208,9 +208,69 @@ void CCatmullRom::CreateCentreline()
 
 void CCatmullRom::CreateOffsetCurves()
 {
+
+	glGenVertexArrays(1, &m_vaoLeftOffsetCurve);
+	glBindVertexArray(m_vaoLeftOffsetCurve);
 	// Compute the offset curves, one left, and one right.  Store the points in m_leftOffsetPoints and m_rightOffsetPoints respectively
+	CVertexBufferObject vbo;
+	vbo.Create();
+	vbo.Bind();
+
+	for (int i = 0; i < m_centrelinePoints.size(); i++) {
+		glm::vec3 p = m_centrelinePoints[i];
+		glm::vec3 pNext = m_centrelinePoints[(i + 1) % m_centrelinePoints.size()];
+
+		glm::vec3 T = glm::normalize(pNext - p);
+		glm::vec3 y(0, 1, 0);
+		glm::vec3 N = glm::normalize(glm::cross(T, y));
+		glm::vec3 B = glm::normalize(glm::cross(N, T));
+
+		float spacing = 5.0f;
+
+	
+		glm::vec3 leftPoint = p - (spacing) * N;
+		glm::vec3 rightPoint = p + (spacing) * N;
+
+		// Texture coordinate (set to (0, 0))
+		glm::vec2 texCoord(0.0f, 0.0f);
+
+		// Normal (set to (0, 1, 0))
+		glm::vec3 normal(0.0f, 1.0f, 0.0f);
+
+
+		vbo.AddData(&leftPoint, sizeof(glm::vec3));
+		vbo.AddData(&texCoord, sizeof(glm::vec2));
+		vbo.AddData(&normal, sizeof(glm::vec3));
+		m_leftOffsetPoints.push_back(leftPoint);
+		m_rightOffsetPoints.push_back(rightPoint);
+	}
 
 	// Generate two VAOs called m_vaoLeftOffsetCurve and m_vaoRightOffsetCurve, each with a VBO, and get the offset curve points on the graphics card
+
+// Generate VAOs called m_vaoLeftOffsetCurve and m_vaoRightOffsetCurve, each with a VBO, and get the offset curve points on the graphics card
+
+	// Upload VBO data to GPU
+	vbo.UploadDataToGPU(GL_STATIC_DRAW);
+
+	// Set vertex attribute pointers
+	GLsizei stride = 2 * sizeof(glm::vec3) + sizeof(glm::vec2);
+
+	// Vertex positions
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, 0);
+
+	// Texture coordinates
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (void*)sizeof(glm::vec3));
+
+	// Normals
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
+
+	// Unbind VBO and VAO
+
+	glBindVertexArray(0);
+
 	// Note it is possible to only use one VAO / VBO with all the points instead.
 
 
@@ -244,6 +304,17 @@ void CCatmullRom::RenderCentreline()
 void CCatmullRom::RenderOffsetCurves()
 {
 	// Bind the VAO m_vaoLeftOffsetCurve and render it
+	//glGenVertexArrays(1, &m_vaoCentreline);
+	glBindVertexArray(m_vaoLeftOffsetCurve);
+	glPointSize(5.0f); // Set point size
+	glDrawArrays(GL_LINE_STRIP, 0, m_leftOffsetPoints.size());
+
+	// Render the centreline as GL_LINE_LOOP
+	glDrawArrays(GL_POINTS, 0, m_leftOffsetPoints.size());
+
+	// Unbind the VAO
+	glBindVertexArray(0);
+
 
 	// Bind the VAO m_vaoRightOffsetCurve and render it
 }

@@ -120,7 +120,7 @@ void Game::Initialise()
 	m_pDiamond = new CDiamond;
 	//m_pCatmullRom->CreatePath(p0,p1,p2,p3);
 	m_pCatmullRom -> CreateCentreline();
-
+	m_pCatmullRom->CreateOffsetCurves();
 
 	RECT dimensions = m_gameWindow.GetDimensions();
 
@@ -340,13 +340,6 @@ void Game::Render()
 	m_pBarrelMesh->Render();
 	modelViewMatrixStack.Pop();
 
-	modelViewMatrixStack.Push();
-	modelViewMatrixStack.Translate(glm::vec3(100.0f, 0.0f, 0.0f));
-	modelViewMatrixStack.Scale(5.0f);
-	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-	m_pBarrelMesh->Render();
-	modelViewMatrixStack.Pop();
 	
 
 	// Render the sphere
@@ -370,6 +363,7 @@ void Game::Render()
 	m_pSphere->Render();
 	modelViewMatrixStack.Pop();
 
+	pMainProgram->UseProgram();
 	modelViewMatrixStack.Push();
 	pMainProgram->SetUniform("bUseTexture", false); // turn off texturing
 	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
@@ -380,6 +374,14 @@ void Game::Render()
 	m_pCatmullRom->RenderCentreline();
 	modelViewMatrixStack.Pop();
 
+	modelViewMatrixStack.Push();
+	pMainProgram->SetUniform("bUseTexture", false); // turn off texturing
+	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+	pMainProgram->SetUniform("matrices.normalMatrix",
+		m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+	// Render your object here
+	m_pCatmullRom->RenderOffsetCurves();
+	modelViewMatrixStack.Pop();
 		
 	// Draw the 2D graphics after the 3D graphics
 	DisplayFrameRate();
@@ -401,10 +403,18 @@ void Game::Update()
 	if (t > 1.0f)
 		t = 0.0f;
 
-	m_currentDistance += m_dt * 0.1f;
+	m_currentDistance += m_dt * 0.05f;
 	glm::vec3 p;
+	glm::vec3 pNext;
 	m_pCatmullRom->Sample(m_currentDistance, p);
-	m_pCamera->Set(p, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	m_pCatmullRom->Sample(m_currentDistance + 1.0f, pNext);
+	glm::vec3 T = glm::normalize(pNext - p);
+	glm::vec3 y(0, 1, 0);
+	glm::vec3 N = glm::normalize(glm::cross(T, y));
+	glm::vec3 B = glm::normalize(glm::cross(N, T));
+
+	glm::vec3 viewPoint = p + 10.0f * T;
+	//m_pCamera->Set(p, viewPoint, y);
 /*
 	glm::vec3 p0 = glm::vec3(-500, 10, -200);
 	glm::vec3 p1 = glm::vec3(0, 10, -200);
