@@ -21,6 +21,7 @@ public:
 
 	void CreateTrack();
 	void RenderTrack();
+	void GeneratePath();
 
 	int CurrentLap(float d); // Return the currvent lap (starting from 0) based on distance along the control curve.
 
