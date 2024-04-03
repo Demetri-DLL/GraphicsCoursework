@@ -66,6 +66,7 @@ Game::Game()
 	m_frameCount = 0;
 	m_elapsedTime = 0.0f;
 	m_currentDistance = 0.0f;
+	m_cameraRotation = 0.0f;
 }
 
 // Destructor
@@ -121,6 +122,8 @@ void Game::Initialise()
 	//m_pCatmullRom->CreatePath(p0,p1,p2,p3);
 	m_pCatmullRom -> CreateCentreline();
 	m_pCatmullRom->CreateOffsetCurves();
+	m_pCatmullRom->CreatePath();
+
 
 	RECT dimensions = m_gameWindow.GetDimensions();
 
@@ -306,6 +309,10 @@ void Game::Render()
 	pDiamondProgram->SetUniform("material1.Ms", glm::vec3(0.0f));	// Specular material reflectance
 	pDiamondProgram->SetUniform("material1.shininess", 15.0f);		// Shininess material property
 
+	pDiamondProgram->SetUniform("material1.Ma", glm::vec3(0.5f));	// Ambient material reflectance
+	pDiamondProgram->SetUniform("material1.Md", glm::vec3(0.5f));	// Diffuse material reflectance
+	pDiamondProgram->SetUniform("material1.Ms", glm::vec3(1.0f));	// Specular material reflectance
+
 	modelViewMatrixStack.Push();
 		pDiamondProgram->SetUniform("modelViewMatrix", modelViewMatrixStack.Top());
 		pDiamondProgram->SetUniform("normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
@@ -314,7 +321,7 @@ void Game::Render()
 	modelViewMatrixStack.Pop();
 
 
-	
+	pMainProgram->UseProgram();
 	// Render the barrel 
 	modelViewMatrixStack.Push();
 		modelViewMatrixStack.Translate(glm::vec3(100.0f, 0.0f, 0.0f));
@@ -363,7 +370,7 @@ void Game::Render()
 	m_pSphere->Render();
 	modelViewMatrixStack.Pop();
 
-	pMainProgram->UseProgram();
+	
 	modelViewMatrixStack.Push();
 	pMainProgram->SetUniform("bUseTexture", false); // turn off texturing
 	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
@@ -381,6 +388,15 @@ void Game::Render()
 		m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 	// Render your object here
 	m_pCatmullRom->RenderOffsetCurves();
+	modelViewMatrixStack.Pop();
+
+	modelViewMatrixStack.Push();
+	pMainProgram->SetUniform("bUseTexture", false); // turn off texturing
+	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+	pMainProgram->SetUniform("matrices.normalMatrix",
+		m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+	// Render your object here
+	m_pCatmullRom->RenderPath();
 	modelViewMatrixStack.Pop();
 		
 	// Draw the 2D graphics after the 3D graphics
@@ -413,23 +429,12 @@ void Game::Update()
 	glm::vec3 N = glm::normalize(glm::cross(T, y));
 	glm::vec3 B = glm::normalize(glm::cross(N, T));
 
-	glm::vec3 viewPoint = p + 10.0f * T;
-	//m_pCamera->Set(p, viewPoint, y);
-/*
-	glm::vec3 p0 = glm::vec3(-500, 10, -200);
-	glm::vec3 p1 = glm::vec3(0, 10, -200);
-	glm::vec3 p2 = glm::vec3(0, 10, 200);
-	glm::vec3 p3 = glm::vec3(-500, 10, 200);
-	
-	glm::vec3 p0 = glm::vec3(0, 50, 0);
-	glm::vec3 p1 = glm::vec3(0, 50, 0);
-	glm::vec3 p2 = glm::vec3(0, 50, 0);
-	glm::vec3 p3 = glm::vec3(0, 50, 0);*/
+	glm::vec3 up = glm::normalize(glm::rotate(glm::vec3(0, 1, 0), m_cameraRotation, T));
 
-	//glm::vec3 xxx = glm::vec3(0.0f, 300.0f, 0.0f);
-	//glm::vec3 yyy = glm::vec3(0.0f, 0.0f, 0.0f);
-	//glm::vec3 zzz = glm::vec3(1.0f, 0.0f, 0.0f);
-	//m_pCamera->Set(xxx, yyy, zzz);
+	glm::vec3 viewPoint = p + 10.0f * T;
+	p.y = 6.0f;
+	//m_pCamera->Set(p, viewPoint, up);
+	
 
 	glm::vec3 center(0.0f, 0.0f, 0.0f); 
 	float radius = 100.0f; 
@@ -587,6 +592,12 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 			break;
 		case VK_F1:
 			m_pAudio->PlayEventSound();
+			break;
+		case VK_LEFT:
+			m_cameraRotation -= m_dt * 0.005f;
+			break;
+		case VK_RIGHT:
+			m_cameraRotation += m_dt * 0.005f;
 			break;
 		}
 		break;

@@ -26,14 +26,23 @@ glm::vec3 CCatmullRom::Interpolate(glm::vec3& p0, glm::vec3& p1, glm::vec3& p2, 
 void CCatmullRom::SetControlPoints()
 {
 	// Set control points (m_controlPoints) here, or load from disk
-	m_controlPoints.push_back(glm::vec3(100, 5, 0));
+	m_controlPoints.push_back(glm::vec3(-70, 5, -70));
+	m_controlPoints.push_back(glm::vec3(30, 5, -70));
+	m_controlPoints.push_back(glm::vec3(70, 5, -2));
+	m_controlPoints.push_back(glm::vec3(20, 5, 10));
+	m_controlPoints.push_back(glm::vec3(10, 5, 60));
+	m_controlPoints.push_back(glm::vec3(-70, 5, 50));
+	m_controlPoints.push_back(glm::vec3(-30, 5, -40));
+	m_controlPoints.push_back(glm::vec3(-80, 5, -40));
+
+	/*	m_controlPoints.push_back(glm::vec3(100, 5, 0));
 	m_controlPoints.push_back(glm::vec3(71, 5, 71));
 	m_controlPoints.push_back(glm::vec3(0, 5, 100));
 	m_controlPoints.push_back(glm::vec3(-71, 5, 71));
 	m_controlPoints.push_back(glm::vec3(-100, 5, 0));
 	m_controlPoints.push_back(glm::vec3(-71, 5, -71));
 	m_controlPoints.push_back(glm::vec3(0, 5, -100));
-	m_controlPoints.push_back(glm::vec3(71, 5, -71));
+	m_controlPoints.push_back(glm::vec3(71, 5, -71));*/
 
 
 	// Optionally, set upvectors (m_controlUpVectors, one for each control point as well)
@@ -392,18 +401,13 @@ glm::vec3 CCatmullRom::_dummy_vector(0.0f, 0.0f, 0.0f);
 
 
 
-glm::vec3 CCatmullRom::pointOnCircle(float radius, float t, const glm::vec3& center) {
-    // calc the angle based on time.
-    float angle = t * glm::two_pi<float>();
-
-    float x = center.x + radius * cos(angle);
-    float z = center.z + radius * sin(angle);
-    return glm::vec3(x, center.y, z);
-}
 
 
-void CCatmullRom::CreatePath(glm::vec3& p0, glm::vec3& p1, glm::vec3& p2, glm::vec3& p3)
+
+void CCatmullRom::CreatePath()
 {
+	std::vector<glm::vec3> pathVertices;
+
     // Use VAO to store state associated with vertices
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
@@ -413,13 +417,36 @@ void CCatmullRom::CreatePath(glm::vec3& p0, glm::vec3& p1, glm::vec3& p2, glm::v
     vbo.Bind();
     glm::vec2 texCoord(0.0f, 0.0f);
     glm::vec3 normal(0.0f, 3.0f, 0.0f);
-    for (unsigned int i = 0; i < 100; i++) {
-        float t = (float)i / 100.0f;
-        glm::vec3 v = Interpolate(p0, p1, p2, p3, t);
-        vbo.AddData(&v, sizeof(glm::vec3));
+    for (unsigned int i = 0; i < m_rightOffsetPoints.size(); i++) {
+        
+       
+        vbo.AddData(&m_leftOffsetPoints[i], sizeof(glm::vec3));
         vbo.AddData(&texCoord, sizeof(glm::vec2));
         vbo.AddData(&normal, sizeof(glm::vec3));
+
+		vbo.AddData(&m_rightOffsetPoints[i], sizeof(glm::vec3));
+		vbo.AddData(&texCoord, sizeof(glm::vec2));
+		vbo.AddData(&normal, sizeof(glm::vec3));
+
+		pathVertices.push_back(m_leftOffsetPoints[i]);
+		pathVertices.push_back(m_rightOffsetPoints[i]);
+
+
+		//maby make new vector to store left and right points
+
     }
+
+	vbo.AddData(&m_leftOffsetPoints[0], sizeof(glm::vec3));
+	vbo.AddData(&texCoord, sizeof(glm::vec2));
+	vbo.AddData(&normal, sizeof(glm::vec3));
+
+	vbo.AddData(&m_rightOffsetPoints[0], sizeof(glm::vec3));
+	vbo.AddData(&texCoord, sizeof(glm::vec2));
+	vbo.AddData(&normal, sizeof(glm::vec3));
+
+
+	m_vertexCount = pathVertices.size();
+
     // Upload the VBO to the GPU
     vbo.UploadDataToGPU(GL_STATIC_DRAW);
     // Set the vertex attribute locations
@@ -434,44 +461,22 @@ void CCatmullRom::CreatePath(glm::vec3& p0, glm::vec3& p1, glm::vec3& p2, glm::v
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(glm::vec3)
         + sizeof(glm::vec2)));
+
+	glBindVertexArray(0);
 }
 
-void CCatmullRom::GeneratePath() {
-	glGenVertexArrays(1, &m_vao);
-	glBindVertexArray(m_vao);
-	// Create a VBO
-	CVertexBufferObject vbo;
-	vbo.Create();
-	vbo.Bind();
-	glm::vec2 texCoord(0.0f, 0.0f);
-	glm::vec3 normal(0.0f, 3.0f, 0.0f);
 
-	for (int i = 0; i < 500; i++) {
-		vbo.AddData(&m_leftOffsetPoints[i],sizeof(glm::vec3));
-		vbo.AddData(&texCoord, sizeof(glm::vec2));
-		vbo.AddData(&normal, sizeof(glm::vec3));
-
-		vbo.AddData(&m_leftOffsetPoints[i+1], sizeof(glm::vec3));
-		vbo.AddData(&texCoord, sizeof(glm::vec2));
-		vbo.AddData(&normal, sizeof(glm::vec3));
-
-		vbo.AddData(&m_rightOffsetPoints[i], sizeof(glm::vec3));
-		vbo.AddData(&texCoord, sizeof(glm::vec2));
-		vbo.AddData(&normal, sizeof(glm::vec3));
-	}
-
-
-}
 
 void CCatmullRom::RenderPath() {
-    // Bind the VAO
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// Bind the VAO
     glBindVertexArray(m_vao);
 
     // Set line width if supported
     glLineWidth(2.0f); // Adjust as needed
-
     // Draw the path using GL_LINE_STRIP primitive with 100 vertices
-    glDrawArrays(GL_LINE_STRIP, 0, 100);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertexCount);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Unbind the VAO
     glBindVertexArray(0);

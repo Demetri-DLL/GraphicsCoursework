@@ -1,8 +1,1 @@
-﻿  CatmullRom.cpp
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(337,52): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(340,55): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(353,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(356,52): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(363,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(366,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  OpenGLTemplate.vcxproj -> C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\x64\Debug\OpenGLTemplate.exe
+﻿  OpenGLTemplate.vcxproj -> C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\x64\Debug\OpenGLTemplate.exe
