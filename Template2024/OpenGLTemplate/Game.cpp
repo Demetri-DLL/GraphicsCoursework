@@ -54,6 +54,7 @@ Game::Game()
 	m_pFtFont = NULL;
 	m_pBarrelMesh = NULL;
 	m_pHorseMesh = NULL;
+	m_pCarMesh = NULL;
 	m_pSphere = NULL;
 	m_pHighResolutionTimer = NULL;
 	m_pAudio = NULL;
@@ -79,6 +80,7 @@ Game::~Game()
 	delete m_pFtFont;
 	delete m_pBarrelMesh;
 	delete m_pHorseMesh;
+	delete m_pCarMesh;
 	delete m_pSphere;
 	delete m_pAudio;
 	delete m_pCatmullRom;
@@ -102,10 +104,6 @@ void Game::Initialise()
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClearDepth(1.0f);
 
-	glm::vec3 p0 = glm::vec3(-500, 10, -200);
-	glm::vec3 p1 = glm::vec3(0, 10, -200);
-	glm::vec3 p2 = glm::vec3(0, 10, 200);
-	glm::vec3 p3 = glm::vec3(-500, 10, 200);
 
 	/// Create objects
 	m_pCamera = new CCamera;
@@ -115,6 +113,7 @@ void Game::Initialise()
 	m_pFtFont = new CFreeTypeFont;
 	m_pBarrelMesh = new COpenAssetImportMesh;
 	m_pHorseMesh = new COpenAssetImportMesh;
+	m_pCarMesh = new COpenAssetImportMesh;
 	m_pSphere = new CSphere;
 	m_pAudio = new CAudio;
 	m_pCatmullRom = new CCatmullRom;
@@ -198,6 +197,7 @@ void Game::Initialise()
 	// Load some meshes in OBJ format
 	m_pBarrelMesh->Load("resources\\models\\Barrel\\Barrel02.obj");  // Downloaded from http://www.psionicgames.com/?page_id=24 on 24 Jan 2013
 	m_pHorseMesh->Load("resources\\models\\Horse\\Horse2.obj");  // Downloaded from http://opengameart.org/content/horse-lowpoly on 24 Jan 2013
+	m_pCarMesh->Load("resources\\models\\Car\\bmw.obj");
 
 	// Create a sphere
 	m_pSphere->Create("resources\\textures\\", "dirtpile01.jpg", 25, 25);  // Texture downloaded from http://www.psionicgames.com/?page_id=26 on 24 Jan 2013
@@ -207,7 +207,7 @@ void Game::Initialise()
 	// Initialise audio and play background music
 	m_pAudio->Initialise();
 	m_pAudio->LoadEventSound("resources\\Audio\\Boing.wav");					// Royalty free sound from freesound.org
-	m_pAudio->LoadMusicStream("resources\\Audio\\DST-Garote.mp3");	// Royalty free music from http://www.nosoapradio.us/
+	//m_pAudio->LoadMusicStream("resources\\Audio\\DST-Garote.mp3");	// Royalty free music from http://www.nosoapradio.us/
 	m_pAudio->PlayMusicStream();
 }
 
@@ -290,6 +290,15 @@ void Game::Render()
 		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 		m_pHorseMesh->Render();
 	modelViewMatrixStack.Pop();*/
+
+modelViewMatrixStack.Push();
+	modelViewMatrixStack.Translate(glm::vec3(50.0f, 0.0f, 0.0f));
+	modelViewMatrixStack.Rotate(glm::vec3(0.0f, 1.0f, 0.0f), 180.0f);
+	modelViewMatrixStack.Scale(0.02f);
+	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+	m_pCarMesh->Render();
+modelViewMatrixStack.Pop();
 
 	//render diamond------------------------
 	CShaderProgram* pDiamondProgram = (*m_pShaderPrograms)[2];
