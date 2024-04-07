@@ -18,6 +18,7 @@ class CSphere;
 class COpenAssetImportMesh;
 class CAudio;
 class CCatmullRom;
+class CCube;
 
 class Game {
 private:
@@ -40,6 +41,7 @@ private:
 	CAudio *m_pAudio;
 	CCatmullRom* m_pCatmullRom;
 	CDiamond* m_pDiamond;
+	CCube* m_pCube;
 
 
 	// Some other member variables
@@ -48,6 +50,10 @@ private:
 	bool m_appActive;
 	float m_currentDistance;
 	float m_cameraRotation;
+	float m_t;
+	glm::vec3 m_spaceShipPosition;
+	glm::mat4 m_spaceShipOrientation;
+
 
 
 public:

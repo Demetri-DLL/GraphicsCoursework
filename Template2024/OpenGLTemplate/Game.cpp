@@ -43,6 +43,7 @@ Source code drawn from a number of sources and examples, including contributions
 #include "OpenAssetImportMesh.h"
 #include "Audio.h"
 #include "Diamond.h"
+#include "Cube.h"
 
 // Constructor
 Game::Game()
@@ -60,6 +61,7 @@ Game::Game()
 	m_pAudio = NULL;
 	m_pCatmullRom = NULL;
 	m_pDiamond = NULL;
+	m_pCube = NULL;
 
 
 	m_dt = 0.0;
@@ -85,6 +87,7 @@ Game::~Game()
 	delete m_pAudio;
 	delete m_pCatmullRom;
 	delete m_pDiamond;
+	delete m_pCube;
 
 
 	if (m_pShaderPrograms != NULL) {
@@ -118,10 +121,21 @@ void Game::Initialise()
 	m_pAudio = new CAudio;
 	m_pCatmullRom = new CCatmullRom;
 	m_pDiamond = new CDiamond;
+	m_pCube = new CCube;
+
+
 	//m_pCatmullRom->CreatePath(p0,p1,p2,p3);
 	m_pCatmullRom -> CreateCentreline();
 	m_pCatmullRom->CreateOffsetCurves();
-	m_pCatmullRom->CreatePath();
+	m_pCatmullRom->CreatePath("resources\\textures\\black-gypsum-wall.jpg");
+	m_pCube->Create("resources\\textures\\concrete-wall-texture.jpg");
+	m_t = 0;
+	m_spaceShipPosition = glm::vec3(0,0,0);
+	m_spaceShipOrientation = glm::mat4(0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0);
+
 
 
 	RECT dimensions = m_gameWindow.GetDimensions();
@@ -291,9 +305,11 @@ void Game::Render()
 		m_pHorseMesh->Render();
 	modelViewMatrixStack.Pop();*/
 
+
 modelViewMatrixStack.Push();
-	modelViewMatrixStack.Translate(glm::vec3(50.0f, 0.0f, 0.0f));
-	modelViewMatrixStack.Rotate(glm::vec3(0.0f, 1.0f, 0.0f), 180.0f);
+	modelViewMatrixStack.Translate(m_spaceShipPosition);
+	modelViewMatrixStack *= m_spaceShipOrientation;
+	modelViewMatrixStack.Rotate(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(180.0f));
 	modelViewMatrixStack.Scale(0.02f);
 	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
 	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
@@ -386,7 +402,6 @@ modelViewMatrixStack.Pop();
 	pMainProgram->SetUniform("matrices.normalMatrix",
 		m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 	// Render your object here
-	//m_pCatmullRom->RenderPath();
 	m_pCatmullRom->RenderCentreline();
 	modelViewMatrixStack.Pop();
 
@@ -400,12 +415,21 @@ modelViewMatrixStack.Pop();
 	modelViewMatrixStack.Pop();
 
 	modelViewMatrixStack.Push();
-	pMainProgram->SetUniform("bUseTexture", false); // turn off texturing
+	pMainProgram->SetUniform("bUseTexture", true); // turn off texturing
 	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
 	pMainProgram->SetUniform("matrices.normalMatrix",
 		m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 	// Render your object here
 	m_pCatmullRom->RenderPath();
+	modelViewMatrixStack.Pop();
+
+	modelViewMatrixStack.Push();
+	pMainProgram->SetUniform("bUseTexture", true); // turn off texturing
+	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+	pMainProgram->SetUniform("matrices.normalMatrix",
+		m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+	// Render your object here
+	m_pCube->Render();
 	modelViewMatrixStack.Pop();
 		
 	// Draw the 2D graphics after the 3D graphics
@@ -437,12 +461,18 @@ void Game::Update()
 	glm::vec3 y(0, 1, 0);
 	glm::vec3 N = glm::normalize(glm::cross(T, y));
 	glm::vec3 B = glm::normalize(glm::cross(N, T));
+	//-------------------------------------------------------------------------------------
 
+	m_spaceShipPosition = p + 20.0f * T;
+
+	m_spaceShipOrientation = glm::mat4(glm::mat3(T, B, N));
+	//----------------------------------------------------------------------------
 	glm::vec3 up = glm::normalize(glm::rotate(glm::vec3(0, 1, 0), m_cameraRotation, T));
 
+	p.y = 8.0f;
+
 	glm::vec3 viewPoint = p + 10.0f * T;
-	p.y = 6.0f;
-	//m_pCamera->Set(p, viewPoint, up);
+	m_pCamera->Set(p, viewPoint, up);
 	
 
 	glm::vec3 center(0.0f, 0.0f, 0.0f); 

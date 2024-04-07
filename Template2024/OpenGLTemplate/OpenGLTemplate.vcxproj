@@ -126,6 +126,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="Cubemap.h" />
     <ClInclude Include="Diamond.h" />
     <ClInclude Include="FreeTypeFont.h" />
@@ -147,6 +148,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CatmullRom.cpp" />
     <ClCompile Include="CatmullRom.h" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Cubemap.cpp" />
     <ClCompile Include="Diamond.cpp" />
     <ClCompile Include="FreeTypeFont.cpp" />

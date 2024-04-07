@@ -26,14 +26,14 @@ glm::vec3 CCatmullRom::Interpolate(glm::vec3& p0, glm::vec3& p1, glm::vec3& p2, 
 void CCatmullRom::SetControlPoints()
 {
 	// Set control points (m_controlPoints) here, or load from disk
-	m_controlPoints.push_back(glm::vec3(-70, 5, -70));
-	m_controlPoints.push_back(glm::vec3(30, 5, -70));
-	m_controlPoints.push_back(glm::vec3(70, 5, -2));
-	m_controlPoints.push_back(glm::vec3(20, 5, 10));
-	m_controlPoints.push_back(glm::vec3(10, 5, 60));
-	m_controlPoints.push_back(glm::vec3(-70, 5, 50));
-	m_controlPoints.push_back(glm::vec3(-30, 5, -40));
-	m_controlPoints.push_back(glm::vec3(-80, 5, -40));
+	m_controlPoints.push_back(glm::vec3(-350, 0.5, -350));
+	m_controlPoints.push_back(glm::vec3(150, 0.5, -250));
+	m_controlPoints.push_back(glm::vec3(350, 0.5, -10));
+	m_controlPoints.push_back(glm::vec3(100, 0.5, 50));
+	m_controlPoints.push_back(glm::vec3(50, 0.5, 300));
+	m_controlPoints.push_back(glm::vec3(-350, 0.5, 250));
+	m_controlPoints.push_back(glm::vec3(-150, 0.5, -200));
+	m_controlPoints.push_back(glm::vec3(-400, 0.5, -200));
 
 	/*	m_controlPoints.push_back(glm::vec3(100, 5, 0));
 	m_controlPoints.push_back(glm::vec3(71, 5, 71));
@@ -234,7 +234,7 @@ void CCatmullRom::CreateOffsetCurves()
 		glm::vec3 N = glm::normalize(glm::cross(T, y));
 		glm::vec3 B = glm::normalize(glm::cross(N, T));
 
-		float spacing = 5.0f;
+		float spacing = 15.0f;
 
 	
 		glm::vec3 leftPoint = p - (spacing) * N;
@@ -288,7 +288,7 @@ void CCatmullRom::CreateOffsetCurves()
 		glm::vec3 N = glm::normalize(glm::cross(T, y));
 		glm::vec3 B = glm::normalize(glm::cross(N, T));
 
-		float spacing = 5.0f;
+		float spacing = 15.0f;
 
 
 		glm::vec3 leftPoint = p - (spacing)*N;
@@ -404,8 +404,14 @@ glm::vec3 CCatmullRom::_dummy_vector(0.0f, 0.0f, 0.0f);
 
 
 
-void CCatmullRom::CreatePath()
+void CCatmullRom::CreatePath(string filename)
 {
+	m_texture.Load(filename);
+	m_texture.SetSamplerObjectParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	m_texture.SetSamplerObjectParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	m_texture.SetSamplerObjectParameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+	m_texture.SetSamplerObjectParameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 	std::vector<glm::vec3> pathVertices;
 
     // Use VAO to store state associated with vertices
@@ -415,21 +421,34 @@ void CCatmullRom::CreatePath()
     CVertexBufferObject vbo;
     vbo.Create();
     vbo.Bind();
-    glm::vec2 texCoord(0.0f, 0.0f);
+	glm::vec2 t0 = glm::vec2(0, 0);
+	glm::vec2 t1 = glm::vec2(1, 0);
+	glm::vec2 t2 = glm::vec2(1, 1);
+	glm::vec2 t3 = glm::vec2(0, 1);
     glm::vec3 normal(0.0f, 3.0f, 0.0f);
-    for (unsigned int i = 0; i < m_rightOffsetPoints.size(); i++) {
-        
+    for (unsigned int i = 0; i < m_rightOffsetPoints.size()-5; i=i+5) {
        
         vbo.AddData(&m_leftOffsetPoints[i], sizeof(glm::vec3));
-        vbo.AddData(&texCoord, sizeof(glm::vec2));
+        vbo.AddData(&t0, sizeof(glm::vec2));
         vbo.AddData(&normal, sizeof(glm::vec3));
 
 		vbo.AddData(&m_rightOffsetPoints[i], sizeof(glm::vec3));
-		vbo.AddData(&texCoord, sizeof(glm::vec2));
+		vbo.AddData(&t1, sizeof(glm::vec2));
 		vbo.AddData(&normal, sizeof(glm::vec3));
 
 		pathVertices.push_back(m_leftOffsetPoints[i]);
 		pathVertices.push_back(m_rightOffsetPoints[i]);
+
+		vbo.AddData(&m_leftOffsetPoints[i+5], sizeof(glm::vec3));
+		vbo.AddData(&t2, sizeof(glm::vec2));
+		vbo.AddData(&normal, sizeof(glm::vec3));
+
+		vbo.AddData(&m_rightOffsetPoints[i+5], sizeof(glm::vec3));
+		vbo.AddData(&t3, sizeof(glm::vec2));
+		vbo.AddData(&normal, sizeof(glm::vec3));
+
+		pathVertices.push_back(m_leftOffsetPoints[i+5]);
+		pathVertices.push_back(m_rightOffsetPoints[i+5]);
 
 
 		//maby make new vector to store left and right points
@@ -437,11 +456,11 @@ void CCatmullRom::CreatePath()
     }
 
 	vbo.AddData(&m_leftOffsetPoints[0], sizeof(glm::vec3));
-	vbo.AddData(&texCoord, sizeof(glm::vec2));
+	vbo.AddData(&t0, sizeof(glm::vec2));
 	vbo.AddData(&normal, sizeof(glm::vec3));
 
 	vbo.AddData(&m_rightOffsetPoints[0], sizeof(glm::vec3));
-	vbo.AddData(&texCoord, sizeof(glm::vec2));
+	vbo.AddData(&t1, sizeof(glm::vec2));
 	vbo.AddData(&normal, sizeof(glm::vec3));
 
 
@@ -468,16 +487,19 @@ void CCatmullRom::CreatePath()
 
 
 void CCatmullRom::RenderPath() {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	// Bind the VAO
     glBindVertexArray(m_vao);
+	m_texture.Bind();
 
     // Set line width if supported
     glLineWidth(2.0f); // Adjust as needed
     // Draw the path using GL_LINE_STRIP primitive with 100 vertices
     glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertexCount);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//m_texture.Release();
     // Unbind the VAO
     glBindVertexArray(0);
+
 }
+//add release destructuor like in cube.cpp
