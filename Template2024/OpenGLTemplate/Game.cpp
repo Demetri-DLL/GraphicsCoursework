@@ -69,7 +69,9 @@ Game::Game()
 	m_frameCount = 0;
 	m_elapsedTime = 0.0f;
 	m_currentDistance = 0.0f;
+	m_currentDistance1 = 20.0f;
 	m_cameraRotation = 0.0f;
+	m_offSet = 0.0f;
 }
 
 // Destructor
@@ -456,16 +458,30 @@ void Game::Update()
 	glm::vec3 p;
 	glm::vec3 pNext;
 	m_pCatmullRom->Sample(m_currentDistance, p);
-	m_pCatmullRom->Sample(m_currentDistance + 1.0f, pNext);
+	m_pCatmullRom->Sample(m_currentDistance +1.0f, pNext);
 	glm::vec3 T = glm::normalize(pNext - p);
 	glm::vec3 y(0, 1, 0);
 	glm::vec3 N = glm::normalize(glm::cross(T, y));
 	glm::vec3 B = glm::normalize(glm::cross(N, T));
+
+	//-------------------------------------------
+	m_currentDistance1 += m_dt * 0.05f;
+	glm::vec3 p1;
+	glm::vec3 pNext1;
+	m_pCatmullRom->Sample(m_currentDistance1, p1);
+	m_pCatmullRom->Sample(m_currentDistance1 + 1.0f, pNext1);
+	glm::vec3 T1 = glm::normalize(pNext1 - p1);
+	glm::vec3 y1(0, 1, 0);
+	glm::vec3 N1 = glm::normalize(glm::cross(T1, y1));
+	glm::vec3 B1 = glm::normalize(glm::cross(N1, T1));
 	//-------------------------------------------------------------------------------------
+	
+	glm::vec3 offSetPosition = p1 + (m_offSet * N1);
+	m_spaceShipPosition = offSetPosition;
+	//m_spaceShipPosition = p1;
+	//m_spaceShipPosition = p + 20.0f * T;
 
-	m_spaceShipPosition = p + 20.0f * T;
-
-	m_spaceShipOrientation = glm::mat4(glm::mat3(T, B, N));
+	m_spaceShipOrientation = glm::mat4(glm::mat3(T1, B1, N1));
 	//----------------------------------------------------------------------------
 	glm::vec3 up = glm::normalize(glm::rotate(glm::vec3(0, 1, 0), m_cameraRotation, T));
 
@@ -473,10 +489,6 @@ void Game::Update()
 
 	glm::vec3 viewPoint = p + 10.0f * T;
 	m_pCamera->Set(p, viewPoint, up);
-	
-
-	glm::vec3 center(0.0f, 0.0f, 0.0f); 
-	float radius = 100.0f; 
 	
 
 	//glm::vec3 point = m_pCatmullRom->pointOnCircle(radius,t, center);
@@ -633,10 +645,16 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 			m_pAudio->PlayEventSound();
 			break;
 		case VK_LEFT:
-			m_cameraRotation -= m_dt * 0.005f;
+			//m_cameraRotation -= m_dt * 0.005f;
+			if (m_offSet > -10.0f) {
+				m_offSet -= m_dt * 0.08f;
+			}
 			break;
 		case VK_RIGHT:
-			m_cameraRotation += m_dt * 0.005f;
+			//m_cameraRotation += m_dt * 0.005f;
+			if (m_offSet < 10.0f) {
+				m_offSet += m_dt * 0.08f;
+			}
 			break;
 		}
 		break;

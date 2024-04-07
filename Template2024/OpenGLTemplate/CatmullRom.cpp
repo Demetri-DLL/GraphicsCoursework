@@ -426,7 +426,7 @@ void CCatmullRom::CreatePath(string filename)
 	glm::vec2 t2 = glm::vec2(1, 1);
 	glm::vec2 t3 = glm::vec2(0, 1);
     glm::vec3 normal(0.0f, 3.0f, 0.0f);
-    for (unsigned int i = 0; i < m_rightOffsetPoints.size()-5; i=i+5) {
+    for (unsigned int i = 0; i < m_rightOffsetPoints.size()-3; i=i+3) {
        
         vbo.AddData(&m_leftOffsetPoints[i], sizeof(glm::vec3));
         vbo.AddData(&t0, sizeof(glm::vec2));
@@ -439,16 +439,16 @@ void CCatmullRom::CreatePath(string filename)
 		pathVertices.push_back(m_leftOffsetPoints[i]);
 		pathVertices.push_back(m_rightOffsetPoints[i]);
 
-		vbo.AddData(&m_leftOffsetPoints[i+5], sizeof(glm::vec3));
+		vbo.AddData(&m_leftOffsetPoints[i+3], sizeof(glm::vec3));
 		vbo.AddData(&t2, sizeof(glm::vec2));
 		vbo.AddData(&normal, sizeof(glm::vec3));
 
-		vbo.AddData(&m_rightOffsetPoints[i+5], sizeof(glm::vec3));
+		vbo.AddData(&m_rightOffsetPoints[i+3], sizeof(glm::vec3));
 		vbo.AddData(&t3, sizeof(glm::vec2));
 		vbo.AddData(&normal, sizeof(glm::vec3));
 
-		pathVertices.push_back(m_leftOffsetPoints[i+5]);
-		pathVertices.push_back(m_rightOffsetPoints[i+5]);
+		pathVertices.push_back(m_leftOffsetPoints[i+3]);
+		pathVertices.push_back(m_rightOffsetPoints[i+3]);
 
 
 		//maby make new vector to store left and right points

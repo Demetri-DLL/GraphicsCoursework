@@ -49,8 +49,10 @@ private:
 	int m_framesPerSecond;
 	bool m_appActive;
 	float m_currentDistance;
+	float m_currentDistance1;
 	float m_cameraRotation;
 	float m_t;
+	float m_offSet;
 	glm::vec3 m_spaceShipPosition;
 	glm::mat4 m_spaceShipOrientation;
 
