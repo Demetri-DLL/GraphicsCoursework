@@ -136,6 +136,7 @@
     <ClInclude Include="MatrixStack.h" />
     <ClInclude Include="OpenAssetImportMesh.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="PoliceCar.h" />
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sphere.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="OpenAssetImportMesh.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="PoliceCar.cpp" />
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Sphere.cpp" />

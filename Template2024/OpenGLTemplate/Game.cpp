@@ -55,6 +55,7 @@ Game::Game()
 	m_pFtFont = NULL;
 	m_pBarrelMesh = NULL;
 	m_pHorseMesh = NULL;
+	m_pPoliceCarMesh = NULL;
 	m_pCarMesh = NULL;
 	m_pSphere = NULL;
 	m_pHighResolutionTimer = NULL;
@@ -70,8 +71,12 @@ Game::Game()
 	m_elapsedTime = 0.0f;
 	m_currentDistance = 0.0f;
 	m_currentDistance1 = 20.0f;
+	m_currentDistance2 = -100.0f;
+	m_multiplier = 0.05f;
 	m_cameraRotation = 0.0f;
 	m_offSet = 0.0f;
+	m_bCam = false;
+	m_bDead = true;
 }
 
 // Destructor
@@ -85,6 +90,7 @@ Game::~Game()
 	delete m_pBarrelMesh;
 	delete m_pHorseMesh;
 	delete m_pCarMesh;
+	delete m_pPoliceCarMesh;
 	delete m_pSphere;
 	delete m_pAudio;
 	delete m_pCatmullRom;
@@ -119,6 +125,7 @@ void Game::Initialise()
 	m_pBarrelMesh = new COpenAssetImportMesh;
 	m_pHorseMesh = new COpenAssetImportMesh;
 	m_pCarMesh = new COpenAssetImportMesh;
+	m_pPoliceCarMesh = new COpenAssetImportMesh;
 	m_pSphere = new CSphere;
 	m_pAudio = new CAudio;
 	m_pCatmullRom = new CCatmullRom;
@@ -205,7 +212,7 @@ void Game::Initialise()
 	m_pSkybox->Create(2500.0f);
 	
 	// Create the planar terrain
-	m_pPlanarTerrain->Create("resources\\textures\\", "grassfloor01.jpg", 2000.0f, 2000.0f, 50.0f); // Texture downloaded from http://www.psionicgames.com/?page_id=26 on 24 Jan 2013
+	m_pPlanarTerrain->Create("resources\\textures\\", "Sci-fi_Floor_003_basecolor.jpg", 2000.0f, 2000.0f, 50.0f); // Texture downloaded from http://www.psionicgames.com/?page_id=26 on 24 Jan 2013
 
 	m_pFtFont->LoadSystemFont("arial.ttf", 32);
 	m_pFtFont->SetShaderProgram(pFontProgram);
@@ -214,6 +221,7 @@ void Game::Initialise()
 	m_pBarrelMesh->Load("resources\\models\\Barrel\\Barrel02.obj");  // Downloaded from http://www.psionicgames.com/?page_id=24 on 24 Jan 2013
 	m_pHorseMesh->Load("resources\\models\\Horse\\Horse2.obj");  // Downloaded from http://opengameart.org/content/horse-lowpoly on 24 Jan 2013
 	m_pCarMesh->Load("resources\\models\\Car\\bmw.obj");
+	m_pPoliceCarMesh->Load("resources\\models\\Car\\policesedan.3ds");
 
 	// Create a sphere
 	m_pSphere->Create("resources\\textures\\", "dirtpile01.jpg", 25, 25);  // Texture downloaded from http://www.psionicgames.com/?page_id=26 on 24 Jan 2013
@@ -307,17 +315,28 @@ void Game::Render()
 		m_pHorseMesh->Render();
 	modelViewMatrixStack.Pop();*/
 
+	if (m_bDead) {
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(m_spaceShipPosition);
+		modelViewMatrixStack *= m_spaceShipOrientation;
+		modelViewMatrixStack.Rotate(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(180.0f));
+		modelViewMatrixStack.Scale(0.02f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pCarMesh->Render();
+		modelViewMatrixStack.Pop();
 
-modelViewMatrixStack.Push();
-	modelViewMatrixStack.Translate(m_spaceShipPosition);
-	modelViewMatrixStack *= m_spaceShipOrientation;
-	modelViewMatrixStack.Rotate(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(180.0f));
-	modelViewMatrixStack.Scale(0.02f);
-	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-	m_pCarMesh->Render();
-modelViewMatrixStack.Pop();
-
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(m_PoliceCarPosition);
+		modelViewMatrixStack *= m_PoliceCarOrientation;
+		modelViewMatrixStack.Rotate(glm::vec3(0.0f, 0.0f, 1.0f), glm::radians(90.0f));
+		modelViewMatrixStack.Rotate(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(90.0f));
+		modelViewMatrixStack.Scale(2.0f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pPoliceCarMesh->Render();
+		modelViewMatrixStack.Pop();
+	}
 	//render diamond------------------------
 	CShaderProgram* pDiamondProgram = (*m_pShaderPrograms)[2];
 	pDiamondProgram->UseProgram();
@@ -347,10 +366,10 @@ modelViewMatrixStack.Pop();
 		m_pDiamond->Render();
 	modelViewMatrixStack.Pop();
 
-
+	
 	pMainProgram->UseProgram();
 	// Render the barrel 
-	modelViewMatrixStack.Push();
+	/*modelViewMatrixStack.Push();
 		modelViewMatrixStack.Translate(glm::vec3(100.0f, 0.0f, 0.0f));
 		modelViewMatrixStack.Scale(5.0f);
 		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
@@ -373,7 +392,7 @@ modelViewMatrixStack.Pop();
 	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 	m_pBarrelMesh->Render();
 	modelViewMatrixStack.Pop();
-
+	*/
 	
 
 	// Render the sphere
@@ -413,7 +432,7 @@ modelViewMatrixStack.Pop();
 	pMainProgram->SetUniform("matrices.normalMatrix",
 		m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 	// Render your object here
-	m_pCatmullRom->RenderOffsetCurves();
+	//m_pCatmullRom->RenderOffsetCurves();
 	modelViewMatrixStack.Pop();
 
 	modelViewMatrixStack.Push();
@@ -459,6 +478,8 @@ void Game::Update()
 	glm::vec3 pNext;
 	m_pCatmullRom->Sample(m_currentDistance, p);
 	m_pCatmullRom->Sample(m_currentDistance +1.0f, pNext);
+	if(m_bCam)
+		m_pCatmullRom->Sample(m_currentDistance - 1.0f, pNext);
 	glm::vec3 T = glm::normalize(pNext - p);
 	glm::vec3 y(0, 1, 0);
 	glm::vec3 N = glm::normalize(glm::cross(T, y));
@@ -476,19 +497,39 @@ void Game::Update()
 	glm::vec3 B1 = glm::normalize(glm::cross(N1, T1));
 	//-------------------------------------------------------------------------------------
 	
+	m_currentDistance2 += m_dt * m_multiplier;
+	glm::vec3 p2;
+	glm::vec3 pNext2;
+	m_pCatmullRom->Sample(m_currentDistance2, p2);
+	m_pCatmullRom->Sample(m_currentDistance2 + 1.0f, pNext2);
+	glm::vec3 T2 = glm::normalize(pNext2 - p2);
+	glm::vec3 y2(0, 1, 0);
+	glm::vec3 N2 = glm::normalize(glm::cross(T2, y2));
+	glm::vec3 B2 = glm::normalize(glm::cross(N2, T2));
+
+
 	glm::vec3 offSetPosition = p1 + (m_offSet * N1);
 	m_spaceShipPosition = offSetPosition;
 	//m_spaceShipPosition = p1;
 	//m_spaceShipPosition = p + 20.0f * T;
-
 	m_spaceShipOrientation = glm::mat4(glm::mat3(T1, B1, N1));
+
+	glm::vec3 offSetPosition2 = p2 + (m_offSet * N2);
+	m_PoliceCarPosition = offSetPosition2;
+	m_PoliceCarOrientation = glm::mat4(glm::mat3(T2, B2, N2));
+	m_multiplier += 0.000001f;
 	//----------------------------------------------------------------------------
 	glm::vec3 up = glm::normalize(glm::rotate(glm::vec3(0, 1, 0), m_cameraRotation, T));
 
 	p.y = 8.0f;
 
 	glm::vec3 viewPoint = p + 10.0f * T;
+	if(m_bDead)
 	m_pCamera->Set(p, viewPoint, up);
+
+	if (glm::distance(m_PoliceCarPosition, m_spaceShipPosition) <= 12.0f) {
+		m_bDead = false;
+	}
 	
 
 	//glm::vec3 point = m_pCatmullRom->pointOnCircle(radius,t, center);
@@ -536,6 +577,13 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 20, 20, "FPS: %d", m_framesPerSecond);
+	}
+	if (!m_bDead) {
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(200, height - 200, 50, "GAME OVER !", NULL);
 	}
 }
 
@@ -656,6 +704,8 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 				m_offSet += m_dt * 0.08f;
 			}
 			break;
+		case VK_CAPITAL:
+			m_bCam = !m_bCam;
 		}
 		break;
 

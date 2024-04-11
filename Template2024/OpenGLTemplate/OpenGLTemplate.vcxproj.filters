@@ -74,6 +74,9 @@
     <ClInclude Include="Cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PoliceCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Audio.cpp">
@@ -135,6 +138,9 @@
     </ClCompile>
     <ClCompile Include="Cube.cpp">
       <Filter>Source Files\BasicShapes</Filter>
+    </ClCompile>
+    <ClCompile Include="PoliceCar.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

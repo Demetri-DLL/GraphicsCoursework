@@ -1,0 +1,338 @@
+# Blender MTL File: 'policesedan.blend'
+# Material Count: 31
+
+newmtl B.001
+Ns 96.078431
+Ka 0.005288 0.005288 0.005288
+Kd 0.016303 0.016303 0.016303
+Ks 0.866667 0.866667 0.866667
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 3
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.015079 0.015079 0.015079
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+
+newmtl Material.002
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.006461 0.006461 0.006461
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.002_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.006461 0.006461 0.006461
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material.003
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.003_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material.004
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.005
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.001651 0.001651 0.001651
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.006
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.007
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.012796 0.012796 0.012796
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.008
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.009
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.011736 0.011736 0.011736
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.010
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.011
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.008870 0.008870 0.008870
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.039
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.447684 0.447684 0.447684
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl Material.039_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.447684 0.447684 0.447684
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ban.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.004482 0.004482 0.004482
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl black.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl black.001_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+
+newmtl cn.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl headlamp.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 0
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl kaca.001
+Ns 96.078431
+Ka 0.350000 0.350000 0.350000
+Kd 0.113920 0.113920 0.113920
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 3
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl pullbar.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.007214 0.007214 0.007214
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl sign.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.097219 0.000880
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl siren.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.017579 0.017579 0.017579
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl sirlgh.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl sirlghtb.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.002662 0.000000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl taillight.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.000000 0.002919
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl velg1.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl velg2.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.010725 0.010725 0.010725
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png
+
+newmtl window.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.009774 0.009774 0.009774
+Ks 0.466667 0.466667 0.466667
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\lp\POLICE\POLICE.png

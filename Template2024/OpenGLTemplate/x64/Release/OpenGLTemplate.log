@@ -1,1 +1,40 @@
-﻿
+﻿  Audio.cpp
+  Camera.cpp
+  CatmullRom.cpp
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(349,55): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(362,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(365,52): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(372,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(375,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(467,35): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  CatmullRom.h
+  Cube.cpp
+  Cubemap.cpp
+  Diamond.cpp
+  FreeTypeFont.cpp
+  Game.cpp
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(476,28): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(489,29): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(500,29): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(698,22): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(704,22): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  GameWindow.cpp
+  HighResolutionTimer.cpp
+  MatrixStack.cpp
+  OpenAssetImportMesh.cpp
+  Plane.cpp
+  PoliceCar.cpp
+  Shaders.cpp
+  Skybox.cpp
+  Sphere.cpp
+  Texture.cpp
+  VertexBufferObject.cpp
+  Compiling...
+  VertexBufferObjectIndexed.cpp
+x64\Release\CatmullRom.obj : warning LNK4042: object specified more than once; extras ignored
+     Creating library C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\x64\Release\OpenGLTemplate.lib and object C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\x64\Release\OpenGLTemplate.exp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 1011 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  OpenGLTemplate.vcxproj -> C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\x64\Release\OpenGLTemplate.exe

@@ -1,6 +1,8 @@
-﻿  Game.cpp
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(457,28): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(468,29): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(650,22): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\Game.cpp(656,22): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+﻿  CatmullRom.cpp
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(349,55): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(362,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(365,52): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(372,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(375,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\OpenGLTemplate\CatmullRom.cpp(467,35): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
   OpenGLTemplate.vcxproj -> C:\Users\Demetri\Downloads\Coursework Graphics new\GraphicsCoursework\Template2024\x64\Debug\OpenGLTemplate.exe

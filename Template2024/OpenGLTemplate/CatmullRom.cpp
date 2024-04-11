@@ -342,8 +342,8 @@ void CCatmullRom::RenderCentreline()
 	// Bind the VAO m_vaoCentreline and render it
 	//glGenVertexArrays(1, &m_vaoCentreline);
 	glBindVertexArray(m_vaoCentreline);
-	glPointSize(5.0f); // Set point size
-	glDrawArrays(GL_POINTS, 0, m_centrelinePoints.size());
+	glPointSize(10.0f); // Set point size
+	//glDrawArrays(GL_POINTS, 0, m_centrelinePoints.size());
 
 	// Render the centreline as GL_LINE_LOOP
 	glDrawArrays(GL_LINE_LOOP, 0, m_centrelinePoints.size());
@@ -422,9 +422,9 @@ void CCatmullRom::CreatePath(string filename)
     vbo.Create();
     vbo.Bind();
 	glm::vec2 t0 = glm::vec2(0, 0);
-	glm::vec2 t1 = glm::vec2(1, 0);
-	glm::vec2 t2 = glm::vec2(1, 1);
-	glm::vec2 t3 = glm::vec2(0, 1);
+	glm::vec2 t1 = glm::vec2(2, 0);
+	glm::vec2 t2 = glm::vec2(2, 2);
+	glm::vec2 t3 = glm::vec2(0, 2);
     glm::vec3 normal(0.0f, 3.0f, 0.0f);
     for (unsigned int i = 0; i < m_rightOffsetPoints.size()-3; i=i+3) {
        

@@ -36,6 +36,7 @@ private:
 	COpenAssetImportMesh *m_pBarrelMesh;
 	COpenAssetImportMesh *m_pHorseMesh;
 	COpenAssetImportMesh* m_pCarMesh;
+	COpenAssetImportMesh* m_pPoliceCarMesh;
 	CSphere *m_pSphere;
 	CHighResolutionTimer *m_pHighResolutionTimer;
 	CAudio *m_pAudio;
@@ -50,10 +51,16 @@ private:
 	bool m_appActive;
 	float m_currentDistance;
 	float m_currentDistance1;
+	float m_currentDistance2;
+	float m_multiplier;
+	bool m_bCam;
 	float m_cameraRotation;
 	float m_t;
 	float m_offSet;
+	float m_bDead;
 	glm::vec3 m_spaceShipPosition;
+	glm::vec3 m_PoliceCarPosition;
+	glm::mat4 m_PoliceCarOrientation;
 	glm::mat4 m_spaceShipOrientation;
 
 
