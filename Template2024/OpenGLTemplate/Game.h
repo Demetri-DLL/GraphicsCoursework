@@ -58,12 +58,14 @@ private:
 	float m_cameraRotation;
 	float m_t;
 	float m_offSet;
-	float m_bDead;
+	float m_Speed;
+	float m_bAlive;
 	glm::vec3 m_RockPos;
 	glm::vec3 m_spaceShipPosition;
 	glm::vec3 m_PoliceCarPosition;
 	glm::mat4 m_PoliceCarOrientation;
 	glm::mat4 m_spaceShipOrientation;
+	std::vector<glm::vec3> RockPositions;
 
 
 

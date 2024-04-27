@@ -507,7 +507,7 @@ void CCatmullRom::RenderPath() {
 glm::vec3 CCatmullRom::RandomPos() {
 	
 	int random = rand() % m_leftOffsetPoints.size();
-	float t = rand() % 30;
+	float t = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	glm::vec3 randomPoint = m_leftOffsetPoints[random] + t * (m_rightOffsetPoints[random] - m_leftOffsetPoints[random]);
 	return randomPoint;
 }

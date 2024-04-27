@@ -77,7 +77,8 @@ Game::Game()
 	m_cameraRotation = 0.0f;
 	m_offSet = 0.0f;
 	m_bCam = false;
-	m_bDead = true;
+	m_bAlive = true;
+	m_Speed = 0.05;
 }
 
 // Destructor
@@ -237,6 +238,10 @@ void Game::Initialise()
 	m_pAudio->LoadEventSound("resources\\Audio\\Boing.wav");					// Royalty free sound from freesound.org
 	//m_pAudio->LoadMusicStream("resources\\Audio\\DST-Garote.mp3");	// Royalty free music from http://www.nosoapradio.us/
 	m_pAudio->PlayMusicStream();
+
+	for (int i = 0; i < 30; i++) {
+		RockPositions.push_back(m_pCatmullRom->RandomPos());
+	}
 }
 
 // Render method runs repeatedly in a loop
@@ -319,7 +324,7 @@ void Game::Render()
 		m_pHorseMesh->Render();
 	modelViewMatrixStack.Pop();*/
 
-	if (m_bDead) {
+	if (m_bAlive) {
 		modelViewMatrixStack.Push();
 		modelViewMatrixStack.Translate(m_spaceShipPosition);
 		modelViewMatrixStack *= m_spaceShipOrientation;
@@ -343,8 +348,55 @@ void Game::Render()
 
 		
 		modelViewMatrixStack.Push();
-		m_RockPos = m_pCatmullRom->RandomPos();
-		modelViewMatrixStack.Translate(m_RockPos);
+		modelViewMatrixStack.Translate(RockPositions[0]);
+		modelViewMatrixStack.Scale(2.0f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pRock->Render();
+		modelViewMatrixStack.Pop();
+
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(RockPositions[1]);
+		modelViewMatrixStack.Scale(2.0f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pRock->Render();
+		modelViewMatrixStack.Pop();
+
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(RockPositions[2]);
+		modelViewMatrixStack.Scale(2.0f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pRock->Render();
+		modelViewMatrixStack.Pop();
+
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(RockPositions[3]);
+		modelViewMatrixStack.Scale(2.0f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pRock->Render();
+		modelViewMatrixStack.Pop();
+
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(RockPositions[4]);
+		modelViewMatrixStack.Scale(2.0f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pRock->Render();
+		modelViewMatrixStack.Pop();
+
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(RockPositions[5]);
+		modelViewMatrixStack.Scale(2.0f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pRock->Render();
+		modelViewMatrixStack.Pop();
+
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(RockPositions[6]);
 		modelViewMatrixStack.Scale(2.0f);
 		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
 		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
@@ -488,7 +540,7 @@ void Game::Update()
 	if (t > 1.0f)
 		t = 0.0f;
 
-	m_currentDistance += m_dt * 0.05f;
+	m_currentDistance += m_dt * m_Speed;
 	glm::vec3 p;
 	glm::vec3 pNext;
 	m_pCatmullRom->Sample(m_currentDistance, p);
@@ -501,7 +553,7 @@ void Game::Update()
 	glm::vec3 B = glm::normalize(glm::cross(N, T));
 
 	//-------------------------------------------
-	m_currentDistance1 += m_dt * 0.05f;
+	m_currentDistance1 += m_dt * m_Speed;
 	glm::vec3 p1;
 	glm::vec3 pNext1;
 	m_pCatmullRom->Sample(m_currentDistance1, p1);
@@ -539,13 +591,20 @@ void Game::Update()
 	p.y = 8.0f;
 
 	glm::vec3 viewPoint = p + 10.0f * T;
-	if(m_bDead)
-	//m_pCamera->Set(p, viewPoint, up);
+	if(m_bAlive)
+	m_pCamera->Set(p, viewPoint, up);
 
 	if (glm::distance(m_PoliceCarPosition, m_spaceShipPosition) <= 12.0f) {
-		m_bDead = false;
+		m_bAlive = false;
 	}
 	
+	for (int i = 0; i < 6; i++) {
+		if (glm::length(RockPositions[i] - m_spaceShipPosition) < 6.0f) {
+			m_Speed = m_Speed*0.95;
+			RockPositions[i] = glm::vec3(0.0f, 0.0f, 0.0f);
+			break;
+		}
+	}
 	
 
 	//glm::vec3 point = m_pCatmullRom->pointOnCircle(radius,t, center);
@@ -602,7 +661,7 @@ void Game::DisplayFrameRate()
 	fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_pFtFont->Render(20, height - 40, 20, "CAPSLOCK to change camera", NULL);
 
-	if (!m_bDead) {
+	if (!m_bAlive) {
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
