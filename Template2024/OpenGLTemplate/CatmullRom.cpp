@@ -503,3 +503,11 @@ void CCatmullRom::RenderPath() {
 
 }
 //add release destructuor like in cube.cpp
+
+glm::vec3 CCatmullRom::RandomPos() {
+	
+	int random = rand() % m_leftOffsetPoints.size();
+	float t = rand() % 30;
+	glm::vec3 randomPoint = m_leftOffsetPoints[random] + t * (m_rightOffsetPoints[random] - m_leftOffsetPoints[random]);
+	return randomPoint;
+}

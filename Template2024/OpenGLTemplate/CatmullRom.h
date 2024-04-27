@@ -25,7 +25,7 @@ public:
 
 	bool Sample(float d, glm::vec3& p, glm::vec3& up = _dummy_vector); // Return a point on the centreline based on a certain distance along the control curve.
 
-
+	glm::vec3 RandomPos();
 
 	float angle;
 private:

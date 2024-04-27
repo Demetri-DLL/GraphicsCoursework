@@ -37,6 +37,7 @@ private:
 	COpenAssetImportMesh *m_pHorseMesh;
 	COpenAssetImportMesh* m_pCarMesh;
 	COpenAssetImportMesh* m_pPoliceCarMesh;
+	COpenAssetImportMesh* m_pRock;
 	CSphere *m_pSphere;
 	CHighResolutionTimer *m_pHighResolutionTimer;
 	CAudio *m_pAudio;
@@ -58,6 +59,7 @@ private:
 	float m_t;
 	float m_offSet;
 	float m_bDead;
+	glm::vec3 m_RockPos;
 	glm::vec3 m_spaceShipPosition;
 	glm::vec3 m_PoliceCarPosition;
 	glm::mat4 m_PoliceCarOrientation;

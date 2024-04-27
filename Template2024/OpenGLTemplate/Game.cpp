@@ -57,6 +57,7 @@ Game::Game()
 	m_pHorseMesh = NULL;
 	m_pPoliceCarMesh = NULL;
 	m_pCarMesh = NULL;
+	m_pRock = NULL;
 	m_pSphere = NULL;
 	m_pHighResolutionTimer = NULL;
 	m_pAudio = NULL;
@@ -91,6 +92,7 @@ Game::~Game()
 	delete m_pHorseMesh;
 	delete m_pCarMesh;
 	delete m_pPoliceCarMesh;
+	delete m_pRock;
 	delete m_pSphere;
 	delete m_pAudio;
 	delete m_pCatmullRom;
@@ -126,6 +128,7 @@ void Game::Initialise()
 	m_pHorseMesh = new COpenAssetImportMesh;
 	m_pCarMesh = new COpenAssetImportMesh;
 	m_pPoliceCarMesh = new COpenAssetImportMesh;
+	m_pRock = new COpenAssetImportMesh;
 	m_pSphere = new CSphere;
 	m_pAudio = new CAudio;
 	m_pCatmullRom = new CCatmullRom;
@@ -136,7 +139,7 @@ void Game::Initialise()
 	//m_pCatmullRom->CreatePath(p0,p1,p2,p3);
 	m_pCatmullRom -> CreateCentreline();
 	m_pCatmullRom->CreateOffsetCurves();
-	m_pCatmullRom->CreatePath("resources\\textures\\black-gypsum-wall.jpg");
+	m_pCatmullRom->CreatePath("resources\\textures\\black-gypsum-wall.jpg"); //https://www.freepik.com/free-photo/black-gypsum-wall_1037501.htm#query=asphalt%20texture%20seamless&position=1&from_view=keyword&track=ais&uuid=dad16982-4819-4efd-b576-3032b7b4c1f1#position=1&query=asphalt%20texture%20seamless
 	m_pCube->Create("resources\\textures\\concrete-wall-texture.jpg");
 	m_t = 0;
 	m_spaceShipPosition = glm::vec3(0,0,0);
@@ -222,6 +225,7 @@ void Game::Initialise()
 	m_pHorseMesh->Load("resources\\models\\Horse\\Horse2.obj");  // Downloaded from http://opengameart.org/content/horse-lowpoly on 24 Jan 2013
 	m_pCarMesh->Load("resources\\models\\Car\\bmw.obj");
 	m_pPoliceCarMesh->Load("resources\\models\\Car\\policesedan.3ds");
+	m_pRock->Load("resources\\models\\Rock\\stones.obj");
 
 	// Create a sphere
 	m_pSphere->Create("resources\\textures\\", "dirtpile01.jpg", 25, 25);  // Texture downloaded from http://www.psionicgames.com/?page_id=26 on 24 Jan 2013
@@ -336,6 +340,17 @@ void Game::Render()
 		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 		m_pPoliceCarMesh->Render();
 		modelViewMatrixStack.Pop();
+
+		
+		modelViewMatrixStack.Push();
+		m_RockPos = m_pCatmullRom->RandomPos();
+		modelViewMatrixStack.Translate(m_RockPos);
+		modelViewMatrixStack.Scale(2.0f);
+		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+		m_pRock->Render();
+		modelViewMatrixStack.Pop();
+		
 	}
 	//render diamond------------------------
 	CShaderProgram* pDiamondProgram = (*m_pShaderPrograms)[2];
@@ -525,11 +540,12 @@ void Game::Update()
 
 	glm::vec3 viewPoint = p + 10.0f * T;
 	if(m_bDead)
-	m_pCamera->Set(p, viewPoint, up);
+	//m_pCamera->Set(p, viewPoint, up);
 
 	if (glm::distance(m_PoliceCarPosition, m_spaceShipPosition) <= 12.0f) {
 		m_bDead = false;
 	}
+	
 	
 
 	//glm::vec3 point = m_pCatmullRom->pointOnCircle(radius,t, center);
@@ -542,6 +558,7 @@ void Game::Update()
 
 	m_pAudio->Update();
 }
+
 
 
 
@@ -578,6 +595,13 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 20, 20, "FPS: %d", m_framesPerSecond);
 	}
+
+	glDisable(GL_DEPTH_TEST);
+	fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+	fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+	fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_pFtFont->Render(20, height - 40, 20, "CAPSLOCK to change camera", NULL);
+
 	if (!m_bDead) {
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
