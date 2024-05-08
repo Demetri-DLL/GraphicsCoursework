@@ -66,6 +66,7 @@ private:
 	glm::mat4 m_PoliceCarOrientation;
 	glm::mat4 m_spaceShipOrientation;
 	std::vector<glm::vec3> RockPositions;
+	std::vector<glm::vec3> DiamondPositions;
 
 
 

@@ -169,6 +169,8 @@ void Game::Initialise()
 	sShaderFileNames.push_back("textShader.frag");
 	sShaderFileNames.push_back("diamondShader.vert");
 	sShaderFileNames.push_back("diamondShader.frag");
+	sShaderFileNames.push_back("lightingShader.vert");
+	sShaderFileNames.push_back("lightingShader.frag");
 	//sShaderFileNames.push_back("mainShader.vert");
 	//sShaderFileNames.push_back("mainShader.frag");
 
@@ -239,17 +241,21 @@ void Game::Initialise()
 	//m_pAudio->LoadMusicStream("resources\\Audio\\DST-Garote.mp3");	// Royalty free music from http://www.nosoapradio.us/
 	m_pAudio->PlayMusicStream();
 
-	for (int i = 0; i < 30; i++) {
+	for (int i = 0; i < 20; i++) {
 		RockPositions.push_back(m_pCatmullRom->RandomPos());
+	}
+
+	for (int i = 0; i < 20; i++) {
+		DiamondPositions.push_back(m_pCatmullRom->RandomPos());
 	}
 }
 
 // Render method runs repeatedly in a loop
-void Game::Render() 
+void Game::Render()
 {
-	
+
 	// Clear the buffers and enable depth testing (z-buffering)
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
 	// Set up a matrix stack
@@ -257,14 +263,14 @@ void Game::Render()
 	modelViewMatrixStack.SetIdentity();
 
 	// Use the main shader program 
-	CShaderProgram *pMainProgram = (*m_pShaderPrograms)[0];
+	CShaderProgram* pMainProgram = (*m_pShaderPrograms)[0];
 	pMainProgram->UseProgram();
 	pMainProgram->SetUniform("bUseTexture", true);
 	pMainProgram->SetUniform("sampler0", 0);
 	// Note: cubemap and non-cubemap textures should not be mixed in the same texture unit.  Setting unit 10 to be a cubemap texture.
-	int cubeMapTextureUnit = 10; 
+	int cubeMapTextureUnit = 10;
 	pMainProgram->SetUniform("CubeMapTex", cubeMapTextureUnit);
-	
+
 
 	// Set the projection matrix
 	pMainProgram->SetUniform("matrices.projMatrix", m_pCamera->GetPerspectiveProjectionMatrix());
@@ -275,36 +281,36 @@ void Game::Render()
 	glm::mat4 viewMatrix = modelViewMatrixStack.Top();
 	glm::mat3 viewNormalMatrix = m_pCamera->ComputeNormalMatrix(viewMatrix);
 
-	
+
 	// Set light and materials in main shader program
 	glm::vec4 lightPosition1 = glm::vec4(-100, 100, -100, 1); // Position of light source *in world coordinates*
-	pMainProgram->SetUniform("light1.position", viewMatrix*lightPosition1); // Position of light source *in eye coordinates*
-	pMainProgram->SetUniform("light1.La", glm::vec3(1.0f));		// Ambient colour of light
-	pMainProgram->SetUniform("light1.Ld", glm::vec3(1.0f));		// Diffuse colour of light
-	pMainProgram->SetUniform("light1.Ls", glm::vec3(1.0f));		// Specular colour of light
+	pMainProgram->SetUniform("light1.position", viewMatrix * lightPosition1); // Position of light source *in eye coordinates*
+	pMainProgram->SetUniform("light1.La", glm::vec3(0.5f));		// Ambient colour of light
+	pMainProgram->SetUniform("light1.Ld", glm::vec3(0.5f));		// Diffuse colour of light
+	pMainProgram->SetUniform("light1.Ls", glm::vec3(0.5f));		// Specular colour of light
 	pMainProgram->SetUniform("material1.Ma", glm::vec3(1.0f));	// Ambient material reflectance
 	pMainProgram->SetUniform("material1.Md", glm::vec3(0.0f));	// Diffuse material reflectance
 	pMainProgram->SetUniform("material1.Ms", glm::vec3(0.0f));	// Specular material reflectance
 	pMainProgram->SetUniform("material1.shininess", 15.0f);		// Shininess material property
-		
+
 
 	// Render the skybox and terrain with full ambient reflectance 
 	modelViewMatrixStack.Push();
-		pMainProgram->SetUniform("renderSkybox", true);
-		// Translate the modelview matrix to the camera eye point so skybox stays centred around camera
-		glm::vec3 vEye = m_pCamera->GetPosition();
-		modelViewMatrixStack.Translate(vEye);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pSkybox->Render(cubeMapTextureUnit);
-		pMainProgram->SetUniform("renderSkybox", false);
+	pMainProgram->SetUniform("renderSkybox", true);
+	// Translate the modelview matrix to the camera eye point so skybox stays centred around camera
+	glm::vec3 vEye = m_pCamera->GetPosition();
+	modelViewMatrixStack.Translate(vEye);
+	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+	m_pSkybox->Render(cubeMapTextureUnit);
+	pMainProgram->SetUniform("renderSkybox", false);
 	modelViewMatrixStack.Pop();
 
 	// Render the planar terrain
 	modelViewMatrixStack.Push();
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pPlanarTerrain->Render();
+	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+	m_pPlanarTerrain->Render();
 	modelViewMatrixStack.Pop();
 
 
@@ -346,63 +352,17 @@ void Game::Render()
 		m_pPoliceCarMesh->Render();
 		modelViewMatrixStack.Pop();
 
-		
-		modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(RockPositions[0]);
-		modelViewMatrixStack.Scale(2.0f);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pRock->Render();
-		modelViewMatrixStack.Pop();
+		for (int i = 0; i < 7; i++) {
+			modelViewMatrixStack.Push();
+			modelViewMatrixStack.Translate(RockPositions[i]);
+			modelViewMatrixStack.Scale(2.0f);
+			pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+			pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+			m_pRock->Render();
+			modelViewMatrixStack.Pop();
+		}
 
-		modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(RockPositions[1]);
-		modelViewMatrixStack.Scale(2.0f);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pRock->Render();
-		modelViewMatrixStack.Pop();
 
-		modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(RockPositions[2]);
-		modelViewMatrixStack.Scale(2.0f);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pRock->Render();
-		modelViewMatrixStack.Pop();
-
-		modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(RockPositions[3]);
-		modelViewMatrixStack.Scale(2.0f);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pRock->Render();
-		modelViewMatrixStack.Pop();
-
-		modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(RockPositions[4]);
-		modelViewMatrixStack.Scale(2.0f);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pRock->Render();
-		modelViewMatrixStack.Pop();
-
-		modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(RockPositions[5]);
-		modelViewMatrixStack.Scale(2.0f);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pRock->Render();
-		modelViewMatrixStack.Pop();
-
-		modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(RockPositions[6]);
-		modelViewMatrixStack.Scale(2.0f);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		m_pRock->Render();
-		modelViewMatrixStack.Pop();
-		
 	}
 	//render diamond------------------------
 	CShaderProgram* pDiamondProgram = (*m_pShaderPrograms)[2];
@@ -426,13 +386,16 @@ void Game::Render()
 	pDiamondProgram->SetUniform("material1.Md", glm::vec3(0.5f));	// Diffuse material reflectance
 	pDiamondProgram->SetUniform("material1.Ms", glm::vec3(1.0f));	// Specular material reflectance
 
-	modelViewMatrixStack.Push();
+	for (int i = 0; i < 5; i++) {
+		modelViewMatrixStack.Push();
+		modelViewMatrixStack.Translate(DiamondPositions[i]);
+		modelViewMatrixStack.Scale(0.1f);
 		pDiamondProgram->SetUniform("modelViewMatrix", modelViewMatrixStack.Top());
 		pDiamondProgram->SetUniform("normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 		pDiamondProgram->SetUniform("projectionMatrix", m_pCamera->GetPerspectiveProjectionMatrix());
 		m_pDiamond->Render();
-	modelViewMatrixStack.Pop();
-
+		modelViewMatrixStack.Pop();
+	}
 	
 	pMainProgram->UseProgram();
 	// Render the barrel 
@@ -601,11 +564,18 @@ void Game::Update()
 	for (int i = 0; i < 6; i++) {
 		if (glm::length(RockPositions[i] - m_spaceShipPosition) < 6.0f) {
 			m_Speed = m_Speed*0.95;
-			RockPositions[i] = glm::vec3(0.0f, 0.0f, 0.0f);
+			RockPositions[i] = glm::vec3(0.0f, 0.0f, 0.0f); //try to store objects themselves in vectors rather than just the positions
 			break;
 		}
 	}
 	
+	for (int i = 0; i < 6; i++) {
+		if (glm::length(DiamondPositions[i] - m_spaceShipPosition) < 4.0f) {
+			m_Speed = m_Speed * 1.10;
+			DiamondPositions[i] = glm::vec3(0.0f, 0.0f, 0.0f); //try to store objects themselves in vectors rather than just the positions
+			break;
+		}
+	}
 
 	//glm::vec3 point = m_pCatmullRom->pointOnCircle(radius,t, center);
 	//m_pCatmullRom->angle = m_pCatmullRom->angle + 0.01;
