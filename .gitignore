@@ -1,0 +1,7 @@
+/Template2024/.vs/
+*.tlog
+*.log
+*.ipdb
+*.exe
+*.pdb
+*.obj

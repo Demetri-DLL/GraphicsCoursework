@@ -79,6 +79,9 @@ Game::Game()
 	m_bCam = false;
 	m_bAlive = true;
 	m_Speed = 0.05;
+	m_score = 0.0;
+	m_topScore = 0.0;
+	m_scoreMultiplier = 1.0;
 }
 
 // Destructor
@@ -496,7 +499,7 @@ void Game::Update()
 {
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
-
+	m_score += m_dt;
 	
 	static float t = 0.0f;
 	t += 0.0003f * (float)m_dt;
@@ -601,7 +604,7 @@ void Game::DisplayFrameRate()
 	int height = dimensions.bottom - dimensions.top;
 
 	// Increase the elapsed time and frame counter
-	m_elapsedTime += m_dt;
+	m_elapsedTime += (m_dt*m_scoreMultiplier);
 	m_frameCount++;
 
 	// Now we want to subtract the current time by the last time that was stored
@@ -630,6 +633,12 @@ void Game::DisplayFrameRate()
 	fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 	fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_pFtFont->Render(20, height - 40, 20, "CAPSLOCK to change camera", NULL);
+
+	fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+	fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+	fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_pFtFont->Render(300, height - 40, 20, "Score %f", m_score);
+
 
 	if (!m_bAlive) {
 		glDisable(GL_DEPTH_TEST);

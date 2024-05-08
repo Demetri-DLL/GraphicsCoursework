@@ -60,6 +60,9 @@ private:
 	float m_offSet;
 	float m_Speed;
 	float m_bAlive;
+	double m_score;
+	double m_topScore;
+	double m_scoreMultiplier;
 	glm::vec3 m_RockPos;
 	glm::vec3 m_spaceShipPosition;
 	glm::vec3 m_PoliceCarPosition;
